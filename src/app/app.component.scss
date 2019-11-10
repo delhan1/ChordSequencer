@@ -1,0 +1,25 @@
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+fa-icon {
+  transition: shrink-bounce 200ms cubic-bezier(.4,.0,.23,1);
+}
+
+.list-group-item {
+  -webkit-transition: background-color .2s ease-in-out;
+  -moz-transition: background-color .2s ease-in-out;
+  -o-transition: background-color .2s ease-in-out;
+  transition: background-color .2s ease-in-out;
+}
+
+.action-icon {
+
+}
