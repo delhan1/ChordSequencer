@@ -1,6 +1,5 @@
-export interface Chord {
-  id?: number;
-  checked?: boolean;
+export interface Drum {
   name?: string;
-  playing?: boolean;
+  sound?: Howl;
+  columns?: {value: boolean}[];
 }

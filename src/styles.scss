@@ -1,1 +1,112 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+$md-mcgpalette0: (
+  50 : #e4f2fe,
+  100 : #bce0fb,
+  200 : #90cbf9,
+  300 : #64b6f7,
+  400 : #42a6f5,
+  500 : #2196f3,
+  600 : #1d8ef1,
+  700 : #1883ef,
+  800 : #1479ed,
+  900 : #0b68ea,
+  A100 : #ffffff,
+  A200 : #e1ecff,
+  A400 : #aeccff,
+  A700 : #95bcff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$md-mcgpalette1: (
+  50 : #fce4ec,
+  100 : #f8bcd0,
+  200 : #f48fb1,
+  300 : #f06292,
+  400 : #ec407a,
+  500 : #e91e63,
+  600 : #e61a5b,
+  700 : #e31651,
+  800 : #df1247,
+  900 : #d90a35,
+  A100 : #ffffff,
+  A200 : #ffd0d8,
+  A400 : #ff9dae,
+  A700 : #ff8498,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$primary: mat-palette($md-mcgpalette0);
+$accent: mat-palette($md-mcgpalette1);
+
+$theme: mat-light-theme($primary, $accent);
+@include angular-material-theme($theme);
+
+$primary: #2196f3;
+$danger: #e91e63;
+$grid-breakpoints: (
+  xs: 0,
+  sm: 600px,
+  md: 960px,
+  lg: 1280px,
+  xl: 1920px
+);
+@import "~bootstrap/scss/bootstrap";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.height-full {
+  height: 100%;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.z-index-5 {
+  z-index: 5;
+}

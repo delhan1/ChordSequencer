@@ -1,5 +1,5 @@
-import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import {async, TestBed} from '@angular/core/testing';
+import {AppComponent} from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'ChordGenerator'`, () => {
+  it(`should have as title 'Chordsequencer'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ChordGenerator');
+    expect(app.title).toEqual('Chordsequencer');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('ChordGenerator app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('Chordsequencer app is running!');
   });
 });
