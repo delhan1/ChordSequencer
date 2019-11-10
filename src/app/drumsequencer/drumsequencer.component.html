@@ -1,4 +1,4 @@
-<section id="tempo" fxLayout="row wrap" fxLayoutAlign="space-between">
+<section id="control" fxLayout="row wrap" fxLayoutAlign="space-between">
   <div class="control-buttons" fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="space-between">
     <button mat-raised-button color="primary" (click)="playingBool ? onPause() : onPlay()" fxFlex.gt-md="47"
             ngClass.gt-md="p-0">
@@ -17,26 +17,36 @@
   </mat-slider>
   <span fxFlex="6" fxLayoutAlign="center center" class="text-center">{{bpm}} bpm</span>
 </section>
-<mat-grid-list [cols]="NUMBER_OF_COLUMNS + 2" rowHeight="1:1" gutterSize="2px" class="bg-black border-1 mt-2">
+<mat-grid-list [cols]="NUMBER_OF_COLUMNS + NUMBER_OF_NAME_COLUMNS" rowHeight="1:1" gutterSize="2px" class="bg-black border-1 mt-2">
   <div class="slider-wrapper">
     <span class="slider z-index-5" [style.left]="sliderPosition.value + '%'"></span>
   </div>
-  <ng-container *ngFor="let drum of drumSet;">
-    <mat-grid-tile [colspan]="2" class="bg-white">{{drum.name}}</mat-grid-tile>
-    <mat-grid-tile *ngFor="let column of drum.columns; let idx = index"
+  <ng-container *ngFor="let drumControl of formArray.controls; let idx = index">
+    <mat-grid-tile [colspan]="_NUMBER_OF_NAME_COLUMNS" class="bg-white">
+      <mat-form-field class="drumsequencer-form-field" floatLabel="never">
+        <mat-select [formControl]="drumControl">
+          <mat-optgroup *ngFor="let set of drumSet" [label]="set.name">
+            <mat-option *ngFor="let drum of set.drums" [value]="drum">
+              {{drum.name}}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile *ngFor="let column of columns[idx]; let idx2 = index"
                    class="pointer"
                    [class.bg-white]="!column.value"
                    [class.list-group-item-primary]="column.value"
-                   [class.border-right-2]="(idx + 1) % 4 === 0"
-                   (click)="toggleCell(drum, column.value); column.value = !column.value"
+                   [class.border-right-2]="(idx2 + 1) % 4 === 0"
+                   (click)="toggleCell(getDrum(idx), column.value); column.value = !column.value"
                    matRipple matRippleColor="#b8daff">
     </mat-grid-tile>
   </ng-container>
 </mat-grid-list>
 
-<mat-grid-list [cols]="NUMBER_OF_COLUMNS + 2" rowHeight="1:1" gutterSize="2px">
-  <mat-grid-tile [colspan]="2" class="bg-white"></mat-grid-tile>
-  <mat-grid-tile *ngFor="let column of drumSet[0].columns; let idx = index"
+<mat-grid-list [cols]="NUMBER_OF_COLUMNS + NUMBER_OF_NAME_COLUMNS" rowHeight="1:1" gutterSize="2px">
+  <mat-grid-tile [colspan]="NUMBER_OF_NAME_COLUMNS" class="bg-white"></mat-grid-tile>
+  <mat-grid-tile *ngFor="let column of columns[0]; let idx = index"
                  class="bg-white">
     {{idx + 1}}
   </mat-grid-tile>
