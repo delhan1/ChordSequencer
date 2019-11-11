@@ -60,6 +60,9 @@ export class DrumsequencerComponent implements OnInit {
     this.drumSet.push({
       name: 'Hats',
       drums: this.repository.getHats(),
+    }, {
+      name: 'Kicks',
+      drums: this.repository.getKicks(),
     });
     /*
     this.drumNames.forEach((drumName: string) => this.drumSet.push({
@@ -97,7 +100,7 @@ export class DrumsequencerComponent implements OnInit {
   }
 
   private setIntervalObservable(callback, time) {
-    return new Observable((observer) => {
+    return new Observable(() => {
       const timeId = setInterval(() => callback(), time);
       return () => {
         clearInterval(timeId);
@@ -168,7 +171,7 @@ export class DrumsequencerComponent implements OnInit {
     this.bpm = event.value;
   }
 
-  public onSliderChange(event: MatSliderChange) {
+  public onSliderChange() {
     if (this.playingBool) {
       this.onPause();
       this.onPlay();

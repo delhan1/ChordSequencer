@@ -13,7 +13,7 @@
     </button>
   </div>
   <mat-slider [value]="bpm" [min]="bpmMin" [max]="bpmMax" (input)="onSliderMove($event)"
-              (change)="onSliderChange($event)" color="primary" fxFlex="75" fxFlex.lt-lg="90">
+              (change)="onSliderChange()" color="primary" fxFlex="75" fxFlex.lt-lg="90">
   </mat-slider>
   <span fxFlex="6" fxLayoutAlign="center center" class="text-center">{{bpm}} bpm</span>
 </section>
