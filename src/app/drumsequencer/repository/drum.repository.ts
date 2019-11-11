@@ -9,12 +9,14 @@ export class DrumRepository {
   private kicks: Drum[] = [];
   private flams: Drum[] = [];
   private rims: Drum[] = [];
+  private snares: Drum[] = [];
 
   constructor() {
     this.initHats();
     this.initKicks();
     this.initFlams();
     this.initRims();
+    this.initSnares();
   }
 
   private initHats(): void {
@@ -47,6 +49,15 @@ export class DrumRepository {
     }
   }
 
+  private initSnares(): void {
+    for (let i = 0; i < 5; i++) {
+      this.addDrum(this.snares, `Snare ${i + 1}`, this.audioPath + 'snares/', `snare(${i + 1}).wav`);
+    }
+    for (let i = 0; i < 8; i++) {
+      this.addDrum(this.snares, `Snare off ${i + 1}`, this.audioPath + 'snares/', `snare-off(${i + 1}).wav`);
+    }
+  }
+
   private addDrum(array: Drum[], drumName: string, filePath: string, fileName: string): void {
     array.push({
       name: drumName,
@@ -71,5 +82,9 @@ export class DrumRepository {
 
   public getRims(): Drum[] {
     return this.rims;
+  }
+
+  public getSnares(): Drum[] {
+    return this.snares;
   }
 }

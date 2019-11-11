@@ -69,6 +69,9 @@ export class DrumsequencerComponent implements OnInit {
     }, {
       name: 'Rims',
       drums: this.repository.getRims(),
+    }, {
+      name: 'Snares',
+      drums: this.repository.getSnares(),
     });
   }
 
@@ -140,7 +143,6 @@ export class DrumsequencerComponent implements OnInit {
   }
 
   public playDrum(drum: Drum): void {
-    console.log(drum);
     drum.sound.play();
   }
 
