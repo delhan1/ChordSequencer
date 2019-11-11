@@ -7,10 +7,12 @@ export class DrumRepository {
   private audioPath = '../assets/audio/';
   private hats: Drum[] = [];
   private kicks: Drum[] = [];
+  private flams: Drum[] = [];
 
   constructor() {
     this.initHats();
     this.initKicks();
+    this.initFlams();
   }
 
   private initHats(): void {
@@ -31,6 +33,12 @@ export class DrumRepository {
     }
   }
 
+  private initFlams(): void {
+    for (let i = 0; i < 8; i++) {
+      this.addDrum(this.flams, `Flam ${i + 1}`, this.audioPath + 'flams/', `flam(${i + 1}).wav`);
+    }
+  }
+
   private addDrum(array: Drum[], drumName: string, filePath: string, fileName: string): void {
     array.push({
       name: drumName,
@@ -47,5 +55,9 @@ export class DrumRepository {
 
   public getKicks(): Drum[] {
     return this.kicks;
+  }
+
+  public getFlams(): Drum[] {
+    return this.flams;
   }
 }

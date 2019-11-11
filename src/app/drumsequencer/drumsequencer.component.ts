@@ -63,17 +63,10 @@ export class DrumsequencerComponent implements OnInit {
     }, {
       name: 'Kicks',
       drums: this.repository.getKicks(),
+    }, {
+      name: 'Flams',
+      drums: this.repository.getFlams(),
     });
-    /*
-    this.drumNames.forEach((drumName: string) => this.drumSet.push({
-      name: drumName,
-      sound: new Howl({
-        src: [`../assets/audio/${drumName}.wav`],
-        preload: true,
-      }),
-      // use map, otherwise fill will create referenced objects
-      columns: new Array(this.NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})),
-    }));*/
   }
 
   private initForm(): void {
@@ -85,7 +78,7 @@ export class DrumsequencerComponent implements OnInit {
     ]);
   }
 
-  private initColumns(): void {
+  private initColumns(): void { // use map, otherwise fill will create referenced objects
     this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
     this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
     this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
