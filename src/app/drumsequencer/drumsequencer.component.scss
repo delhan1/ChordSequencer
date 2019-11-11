@@ -48,6 +48,12 @@ mat-grid-tile.cell-active {
   width: 90%;
 }
 
+::ng-deep span.mat-option-text {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 ::ng-deep .drumsequencer-form-field .mat-form-field-infix {
   border: none;
 }

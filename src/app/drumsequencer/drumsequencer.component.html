@@ -17,7 +17,8 @@
   </mat-slider>
   <span fxFlex="6" fxLayoutAlign="center center" class="text-center">{{bpm}} bpm</span>
 </section>
-<mat-grid-list [cols]="NUMBER_OF_COLUMNS + NUMBER_OF_NAME_COLUMNS" rowHeight="1:1" gutterSize="2px" class="bg-black border-1 mt-2">
+<mat-grid-list [cols]="NUMBER_OF_COLUMNS + NUMBER_OF_NAME_COLUMNS" rowHeight="1:1" gutterSize="2px"
+               class="bg-black border-1 mt-2">
   <div class="slider-wrapper">
     <span class="slider z-index-5" [style.left]="sliderPosition.value + '%'"></span>
   </div>
@@ -25,9 +26,17 @@
     <mat-grid-tile [colspan]="_NUMBER_OF_NAME_COLUMNS" class="bg-white">
       <mat-form-field class="drumsequencer-form-field" floatLabel="never">
         <mat-select [formControl]="drumControl">
+          <mat-select-trigger>
+            {{drumControl.value.name}}
+          </mat-select-trigger>
           <mat-optgroup *ngFor="let set of drumSet" [label]="set.name">
             <mat-option *ngFor="let drum of set.drums" [value]="drum">
               {{drum.name}}
+              <button mat-icon-button matSuffix (click)="$event.stopPropagation(); playDrum(drum)">
+                <mat-icon [attr.aria-label]="'Play ' + drum.name" class="mr-0">
+                  play_arrow
+                </mat-icon>
+              </button>
             </mat-option>
           </mat-optgroup>
         </mat-select>
