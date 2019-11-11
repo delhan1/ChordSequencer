@@ -8,11 +8,13 @@ export class DrumRepository {
   private hats: Drum[] = [];
   private kicks: Drum[] = [];
   private flams: Drum[] = [];
+  private rims: Drum[] = [];
 
   constructor() {
     this.initHats();
     this.initKicks();
     this.initFlams();
+    this.initRims();
   }
 
   private initHats(): void {
@@ -34,8 +36,14 @@ export class DrumRepository {
   }
 
   private initFlams(): void {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 5; i++) {
       this.addDrum(this.flams, `Flam ${i + 1}`, this.audioPath + 'flams/', `flam(${i + 1}).wav`);
+    }
+  }
+
+  private initRims(): void {
+    for (let i = 0; i < 7; i++) {
+      this.addDrum(this.rims, `Rim ${i + 1}`, this.audioPath + 'rims/', `rim(${i + 1}).wav`);
     }
   }
 
@@ -59,5 +67,9 @@ export class DrumRepository {
 
   public getFlams(): Drum[] {
     return this.flams;
+  }
+
+  public getRims(): Drum[] {
+    return this.rims;
   }
 }

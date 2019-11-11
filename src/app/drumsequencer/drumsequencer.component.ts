@@ -66,6 +66,9 @@ export class DrumsequencerComponent implements OnInit {
     }, {
       name: 'Flams',
       drums: this.repository.getFlams(),
+    }, {
+      name: 'Rims',
+      drums: this.repository.getRims(),
     });
   }
 
