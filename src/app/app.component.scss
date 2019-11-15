@@ -170,6 +170,10 @@ button {
   opacity: 0.7;
 }
 
-::ng-deep .mat-form-field-wrapper, .mat-form-field-wrapper * {
+:host ::ng-deep .mat-form-field-wrapper{
   padding-bottom: 0;
+
+  .mat-form-field-underline {
+    position: unset;
+  }
 }

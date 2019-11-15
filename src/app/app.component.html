@@ -1,5 +1,5 @@
 <div class="container mt-2 text-center">
-  <h1>Chord Generator</h1>
+  <h1>Chord Sequencer</h1>
 
   <div class="input-group mb-3 mt-3">
     <input (input)="onStopTyping()" [formControl]="chordNameControl" type="text" class="form-control"
@@ -53,7 +53,7 @@
 <div class="container chord-section" cdkDropListGroup>
   <div fxLayoutAlign="space-between">
     <h4>Chord sequence</h4>
-    <mat-form-field class="example-full-width">
+    <mat-form-field>
       <mat-select [formControl]="barsControl" placeholder="Bars per chord">
         <mat-option *ngFor="let val of [1,2,4]" [value]="val">
           {{val}}

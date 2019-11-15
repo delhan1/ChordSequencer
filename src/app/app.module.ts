@@ -20,6 +20,7 @@ import {
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DrumsequencerComponent} from './drumsequencer/drumsequencer.component';
+import {DrumRepository} from './drumsequencer/repository/drum.repository';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import {DrumsequencerComponent} from './drumsequencer/drumsequencer.component';
     MatFormFieldModule,
     MatSelectModule,
   ],
-  providers: [ChordRepository],
+  providers: [ChordRepository, DrumRepository],
   bootstrap: [AppComponent]
 })
 export class AppModule {

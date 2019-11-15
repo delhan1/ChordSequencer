@@ -1,4 +1,5 @@
-$column-width: calc(100% / 18);
+$column-width: calc(100% / 19);
+$name-columns: 3;
 
 .cell {
   width: 6.25%;
@@ -22,7 +23,7 @@ mat-grid-tile.cell-active {
 }
 
 .control-buttons {
-  width: calc(#{$column-width} * 2);
+  width: calc(#{$column-width} * #{$name-columns});
   button {
     min-width: unset;
   }
@@ -31,7 +32,7 @@ mat-grid-tile.cell-active {
 .slider-wrapper {
   position: absolute;
   width: calc(#{$column-width} * 16);
-  left: calc(#{$column-width} * 2);
+  left: calc(#{$column-width} * #{$name-columns});
   height: 100%;
 }
 
@@ -41,4 +42,18 @@ mat-grid-tile.cell-active {
   height: 100%;
   background-color: var(--primary);
   opacity: 0.7;
+}
+
+.mat-form-field {
+  width: 90%;
+}
+
+::ng-deep span.mat-option-text {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+::ng-deep .drumsequencer-form-field .mat-form-field-infix {
+  border: none;
 }

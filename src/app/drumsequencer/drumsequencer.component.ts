@@ -1,9 +1,10 @@
-import {Component, EventEmitter, HostBinding, Input, OnInit, Output} from '@angular/core';
-import {Howl} from 'howler';
-import {Drum} from './model/drum.model';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Drum, DrumSet} from './model/drum.model';
 import {MatSliderChange} from '@angular/material';
 import {takeUntil} from 'rxjs/operators';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {FormArray, FormBuilder, FormControl} from '@angular/forms';
+import {DrumRepository} from './repository/drum.repository';
 
 @Component({
   selector: 'app-drumsequencer',
@@ -11,8 +12,9 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
   styleUrls: ['./drumsequencer.component.scss']
 })
 export class DrumsequencerComponent implements OnInit {
-  private NUMBER_OF_COLUMNS: number = 16;
-  private PERCENTAGE_PER_COLUMN: number = 100 / this.NUMBER_OF_COLUMNS;
+  private _NUMBER_OF_COLUMNS: number = 16;
+  private _NUMBER_OF_NAME_COLUMNS: number = 3;
+  private PERCENTAGE_PER_COLUMN: number = 100 / this._NUMBER_OF_COLUMNS;
   private MOVES_PER_COLUMN: number = 10;
   private PERCENTAGE_PER_MOVE: number = this.PERCENTAGE_PER_COLUMN / this.MOVES_PER_COLUMN;
   private columnPlaying: number = 0;
@@ -29,11 +31,25 @@ export class DrumsequencerComponent implements OnInit {
   public bpm: number = 60; // Beats Per Minute
   public bpmMin: number = 1;
   public bpmMax: number = 250;
-  public drumNames = ['kick', 'hat', 'snare', 'snap'];
-  public drumSet: Drum[] = [];
+  public drumNames: string[] = ['kick', 'hat', 'snare', 'snap'];
+  public drumSet: DrumSet[] = [];
+  public hats: Drum[];
+  public formArray: FormArray;
+  public columns: {value: boolean}[][] = [];
 
-  constructor() {
+  constructor(private fb: FormBuilder, private repository: DrumRepository) {
     this.initDrumSet();
+    this.initForm();
+    this.initColumns();
+  }
+
+
+  get NUMBER_OF_COLUMNS(): number {
+    return this._NUMBER_OF_COLUMNS;
+  }
+
+  get NUMBER_OF_NAME_COLUMNS(): number {
+    return this._NUMBER_OF_NAME_COLUMNS;
   }
 
   ngOnInit() {
@@ -41,28 +57,53 @@ export class DrumsequencerComponent implements OnInit {
   }
 
   private initDrumSet(): void {
-    this.drumNames.forEach((drumName: string) => this.drumSet.push({
-      name: drumName,
-      sound: new Howl({
-        src: [`../assets/audio/${drumName}.wav`],
-        preload: true,
-      }),
-      // use map, otherwise fill will create referenced objects
-      columns: new Array(this.NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})),
-    }));
+    this.drumSet.push({
+      name: 'Hats',
+      drums: this.repository.getHats(),
+    }, {
+      name: 'Kicks',
+      drums: this.repository.getKicks(),
+    }, {
+      name: 'Flams',
+      drums: this.repository.getFlams(),
+    }, {
+      name: 'Rims',
+      drums: this.repository.getRims(),
+    }, {
+      name: 'Snares',
+      drums: this.repository.getSnares(),
+    }, {
+      name: 'Percussions',
+      drums: this.repository.getPercussions(),
+    });
+  }
+
+  private initForm(): void {
+    this.formArray = new FormArray([
+      new FormControl(this.drumSet[0].drums[0]),
+      new FormControl(this.drumSet[0].drums[1]),
+      new FormControl(this.drumSet[0].drums[2]),
+      new FormControl(this.drumSet[0].drums[3]),
+    ]);
+  }
+
+  private initColumns(): void { // use map, otherwise fill will create referenced objects
+    this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
+    this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
+    this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
+    this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
   }
 
   private playSequence() {
-    const interval$ = this.setIntervalObservable(() =>
+    this.setIntervalObservable(() =>
       this.computeSliderPosition(), 60000 / this.bpm / 40)
       .pipe(takeUntil(this.playing))
       .subscribe(() => console.log('interval'));
   }
 
   private setIntervalObservable(callback, time) {
-    return new Observable((observer) => {
+    return new Observable(() => {
       const timeId = setInterval(() => callback(), time);
-      // Teardown logic here
       return () => {
         clearInterval(timeId);
       };
@@ -73,7 +114,7 @@ export class DrumsequencerComponent implements OnInit {
     if (this.sliderMoves % this.MOVES_PER_COLUMN === 0) {
       this.playColumn();
       this.columnPlaying++;
-      if (this.columnPlaying === this.NUMBER_OF_COLUMNS) {
+      if (this.columnPlaying === this._NUMBER_OF_COLUMNS) {
         this.columnPlaying = 0;
       }
     }
@@ -87,11 +128,15 @@ export class DrumsequencerComponent implements OnInit {
   }
 
   private playColumn(): void {
-    this.drumSet.forEach((drum: Drum) => {
-      if (drum.columns[this.columnPlaying].value) {
-        this.playDrum(drum);
+    this.columns.forEach((columns: ({value: boolean})[], index: number) => {
+      if (columns[this.columnPlaying].value) {
+        this.playDrum(this.getDrum(index));
       }
     });
+  }
+
+  public getDrum(index: number): Drum {
+    return this.formArray.at(index).value;
   }
 
   public toggleCell(drum: Drum, column: boolean): void {
@@ -127,7 +172,7 @@ export class DrumsequencerComponent implements OnInit {
     this.bpm = event.value;
   }
 
-  public onSliderChange(event: MatSliderChange) {
+  public onSliderChange() {
     if (this.playingBool) {
       this.onPause();
       this.onPlay();
