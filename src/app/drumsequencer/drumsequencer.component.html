@@ -1,12 +1,12 @@
 <section id="control" fxLayout="row wrap" fxLayoutAlign="space-between">
   <div class="control-buttons" fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="space-between">
-    <button mat-raised-button color="primary" (click)="playingBool ? onPause() : onPlay()" fxFlex.gt-md="47"
-            ngClass.gt-md="p-0">
+    <button mat-raised-button color="primary" type="button" (click)="playingBool ? onPause() : onPlay()"
+            fxFlex.gt-md="47" ngClass.gt-md="p-0">
       <mat-icon aria-hidden="false" [attr.aria-label]="(playingBool ? 'Pause' : 'Play') + ' drumsequencer'">
         {{playingBool ? 'pause' : 'play_arrow'}}
       </mat-icon>
     </button>
-    <button mat-raised-button color="primary" (click)="onStop()" fxFlex.gt-md="47" ngClass.gt-md="p-0">
+    <button mat-raised-button color="primary" type="button" (click)="onStop()" fxFlex.gt-md="47" ngClass.gt-md="p-0">
       <mat-icon aria-hidden="false" aria-label="Stop drumsequencer">
         stop
       </mat-icon>
@@ -32,7 +32,7 @@
           <mat-optgroup *ngFor="let set of drumSet" [label]="set.name">
             <mat-option *ngFor="let drum of set.drums" [value]="drum">
               {{drum.name}}
-              <button mat-icon-button matSuffix (click)="$event.stopPropagation(); playDrum(drum)">
+              <button mat-icon-button matSuffix type="button" (click)="$event.stopPropagation(); playDrum(drum)">
                 <mat-icon [attr.aria-label]="'Play ' + drum.name" class="mr-0">
                   play_arrow
                 </mat-icon>

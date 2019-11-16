@@ -31,9 +31,7 @@ export class DrumsequencerComponent implements OnInit {
   public bpm: number = 60; // Beats Per Minute
   public bpmMin: number = 1;
   public bpmMax: number = 250;
-  public drumNames: string[] = ['kick', 'hat', 'snare', 'snap'];
   public drumSet: DrumSet[] = [];
-  public hats: Drum[];
   public formArray: FormArray;
   public columns: {value: boolean}[][] = [];
 
