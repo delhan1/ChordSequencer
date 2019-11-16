@@ -44,8 +44,8 @@
     </mat-card>
   </ul>
   <div class="mt-2" fxLayoutAlign="end">
-    <button mat-raised-button color="accent">Delete Selected</button>
-    <button mat-raised-button color="primary">Add Selected</button>
+    <button mat-raised-button color="accent" type="button">Delete Selected</button>
+    <button mat-raised-button color="primary" type="button">Add Selected</button>
   </div>
 </section>
 
@@ -84,9 +84,19 @@
       </mat-card>
     </div>
   </div>
+  <button mat-raised-button color="primary" type="button" class="mt-2" [disabled]="chordsSequence.length < 2"
+          (click)="shuffleSequence()">
+    Shuffle Sequence
+  </button>
 </div>
 
 <section id="drumsequencer" class="container chord-section">
   <h4 class=" mb-3">Chord player</h4>
   <app-drumsequencer (sliderPosition)="onSliderChange($event)" (stop)="onStop()"></app-drumsequencer>
+  <button mat-raised-button color="primary" type="button" class="mt-2" [disabled]="chordsSequence.length < 2">
+    Random Instruments
+  </button>
+  <button mat-raised-button color="primary" type="button" class="mt-2" [disabled]="chordsSequence.length < 2">
+    Random Fields
+  </button>
 </section>

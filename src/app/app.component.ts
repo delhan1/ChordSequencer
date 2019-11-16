@@ -3,9 +3,8 @@ import {Chord} from './chord.model';
 import {FormControl} from '@angular/forms';
 import {ChordRepository} from './chord.repository';
 import {CdkDrag, CdkDragDrop, CdkDragMove, CdkDropList, CdkDropListGroup, moveItemInArray} from '@angular/cdk/drag-drop';
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {ViewportRuler} from '@angular/cdk/overlay';
-import {Howl} from 'howler';
 
 declare var chordPlayer: any;
 
@@ -19,11 +18,6 @@ export class AppComponent implements AfterViewInit {
   @ViewChild(CdkDropList, {static: false}) placeholder: CdkDropList;
 
   private timeout;
-  private playing: Subject<boolean> = new Subject<boolean>();
-  private stopped: Subject<boolean> = new Subject<boolean>();
-  private playingBool: boolean = false;
-  private pausedBool: boolean = true;
-  private audio: Howl;
   private playedChord: Chord;
   private playedChordIndex: number = 0;
 
@@ -32,13 +26,11 @@ export class AppComponent implements AfterViewInit {
   public chordNameControl: FormControl;
   public barsControl: FormControl;
   public chordSliderPosition: number = 0;
-  public bpm: number = 60; // Beats Per Minute
 
   public target: CdkDropList;
   public targetIndex: number;
   public source: CdkDropList;
   public sourceIndex: number;
-  public dragIndex: number;
   public activeContainer;
 
   constructor(private chordRepository: ChordRepository, private viewportRuler: ViewportRuler) {
@@ -114,6 +106,13 @@ export class AppComponent implements AfterViewInit {
     } else if (this.playedChordIndex > chordIndex) {
       this.playedChordIndex--;
     }
+  }
+
+  public shuffleSequence(): void {
+    this.playedChord.playing = false;
+    this.chordsSequence.sort(() => Math.random() - .5);
+    this.playedChord = this.chordsSequence[this.playedChordIndex];
+    this.playedChord.playing = true;
   }
 
   public addChord(): void {
