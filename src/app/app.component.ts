@@ -99,12 +99,21 @@ export class AppComponent implements AfterViewInit {
 
   public addChordToSequence(event: Event, chord: Chord): void {
     event.stopPropagation();
-    this.chordsSequence.push(Object.assign({}, chord));
+    this.chordsSequence.push({ name: chord.name, playing: chord.playing });
   }
 
   public removeChordFromSequence(event: Event, chordIndex: number): void {
     event.stopPropagation();
     this.chordsSequence.splice(chordIndex, 1);
+    if (this.playedChordIndex === chordIndex) {
+      if (this.playedChordIndex !== 0 && this.playedChordIndex === this.chordsSequence.length) {
+        this.playedChordIndex--;
+      }
+      this.playedChord = this.chordsSequence[this.playedChordIndex];
+      this.playedChord.playing = true;
+    } else if (this.playedChordIndex > chordIndex) {
+      this.playedChordIndex--;
+    }
   }
 
   public addChord(): void {
