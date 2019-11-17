@@ -164,6 +164,7 @@ export class DrumsequencerComponent implements OnInit {
     this.playingBool = false;
     this.playing.next(false);
     this.sliderPosition.next(0);
+    this.sliderMoves = 0;
     this.columnPlaying = 0;
     this.stopped$.next(true);
   }
