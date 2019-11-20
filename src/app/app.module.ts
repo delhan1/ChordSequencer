@@ -14,6 +14,7 @@ import {
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
+  MatInputModule,
   MatRippleModule,
   MatSelectModule,
   MatSliderModule
@@ -44,6 +45,7 @@ import {DrumRepository} from './drumsequencer/repository/drum.repository';
     FormsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatInputModule,
   ],
   providers: [ChordRepository, DrumRepository],
   bootstrap: [AppComponent]

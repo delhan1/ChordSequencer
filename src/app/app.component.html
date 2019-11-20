@@ -17,6 +17,12 @@
 <section id="available-chords" class="container chord-section">
   <h4>Available chords</h4>
 
+  <mat-checkbox class="z-index-5 mt-3 mb-3" fxLayoutAlign="none center" [checked]="chordsSelected === chords.length"
+                [indeterminate]="chordsSelected && chordsSelected < chords.length"
+                (change)="toggleAll(chordsSelected !== chords.length)">
+    <span class="ml-2 unselectable">Select All</span>
+  </mat-checkbox>
+
   <ul class="list-group list-group-horizontal row m-auto">
     <p *ngIf="!chords.length" class="text-dark col">No chords found, you can add new one.</p>
     <mat-card *ngFor="let chord of chords; let disabled = false;" [class.list-group-item-primary]="chord.checked"
@@ -43,9 +49,29 @@
       </div>
     </mat-card>
   </ul>
-  <div class="mt-2" fxLayoutAlign="end">
-    <button mat-raised-button color="accent" type="button">Delete Selected</button>
-    <button mat-raised-button color="primary" type="button">Add Selected</button>
+  <div class="mt-2" fxLayoutAlign="space-between">
+    <div fxLayout="row wrap" fxFlex="48" fxFlex.lt-sm="40">
+      <button mat-raised-button color="primary" type="button" class="mr-3" fxFlexAlign="baseline"
+              [disabled]="selectChordsControl.invalid || !selectChordsControl.value" (click)="randomlySelect()">
+        Randomly Select
+      </button>
+      <mat-form-field class="border-0-all" fxFlex="1 1 140px">
+        <input matInput [formControl]="selectChordsControl" type="number" [min]="MIN_SELECTED"
+               [max]="chords.length === 0 ? 0 : chords.length - 1">
+        <span matSuffix>chord(s)</span>
+
+        <mat-error *ngIf="selectChordsControl.hasError('min')">
+          Minimum value is {{MIN_SELECTED}}
+        </mat-error>
+        <mat-error *ngIf="selectChordsControl.hasError('max')">
+          Maximum value is {{chords.length === 0 ? 0 : chords.length - 1}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayoutAlign="end" fxFlex="48" fxFlex.lt-sm="56">
+      <button mat-raised-button color="accent" type="button" fxFlexAlign="baseline">Delete Selected</button>
+      <button mat-raised-button color="primary" type="button" fxFlexAlign="baseline">Add Selected</button>
+    </div>
   </div>
 </section>
 
@@ -53,7 +79,7 @@
 <div class="container chord-section" cdkDropListGroup>
   <div fxLayoutAlign="space-between">
     <h4>Chord sequence</h4>
-    <mat-form-field>
+    <mat-form-field class="unset">
       <mat-select [formControl]="barsControl" placeholder="Bars per chord">
         <mat-option *ngFor="let val of [1,2,4]" [value]="val">
           {{val}}
