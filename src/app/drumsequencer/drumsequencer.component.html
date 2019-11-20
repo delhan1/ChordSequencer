@@ -24,7 +24,7 @@
   </div>
   <ng-container *ngFor="let drumControl of formArray.controls; let idx = index">
     <mat-grid-tile [colspan]="_NUMBER_OF_NAME_COLUMNS" class="bg-white">
-      <mat-form-field class="drumsequencer-form-field" floatLabel="never">
+      <mat-form-field class="drumsequencer-form-field unset" floatLabel="never">
         <mat-select [formControl]="drumControl">
           <mat-select-trigger>
             {{drumControl.value.name}}
