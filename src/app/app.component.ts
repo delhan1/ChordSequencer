@@ -5,6 +5,7 @@ import {ChordRepository} from './chord.repository';
 import {CdkDrag, CdkDragDrop, CdkDragMove, CdkDropList, CdkDropListGroup, moveItemInArray} from '@angular/cdk/drag-drop';
 import {Observable} from 'rxjs';
 import {ViewportRuler} from '@angular/cdk/overlay';
+import {CommonUtils} from './utils/common.utils';
 
 declare var chordPlayer: any;
 
@@ -38,7 +39,7 @@ export class AppComponent implements AfterViewInit {
   public sourceIndex: number;
   public activeContainer;
 
-  constructor(private chordRepository: ChordRepository, private viewportRuler: ViewportRuler) {
+  constructor(private chordRepository: ChordRepository, private viewportRuler: ViewportRuler, private utils: CommonUtils) {
     this.chords = [...this.chordRepository.getChords()]; // backup
     this.chordNameControl = new FormControl(['']);
     this.barsControl = new FormControl(4);
@@ -78,7 +79,6 @@ export class AppComponent implements AfterViewInit {
         this.playedChord.playing = true;
       }
     }
-
   }
 
   public onStop(): void {
@@ -120,7 +120,7 @@ export class AppComponent implements AfterViewInit {
     this.toggleAll(select);
 
     while (this.chordsSelected !== this.selectChordsControl.value) {
-      randomIdx = this.generateRandomInteger(0, this.chords.length - 1);
+      randomIdx = this.utils.generateRandomInteger(0, this.chords.length - 1);
 
       chordChecked = select ? this.chords[randomIdx].checked : !this.chords[randomIdx].checked;
       if (chordChecked) {
@@ -176,10 +176,6 @@ export class AppComponent implements AfterViewInit {
   private findChord(): void {
     this.chords = this.chordRepository.getChords().filter((chord: Chord) =>
       chord.name.toLowerCase().includes(this.chordNameControl.value.toString().toLowerCase()));
-  }
-
-  private generateRandomInteger(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min) + min);
   }
 
   private setIntervalObservable(callback, time) {

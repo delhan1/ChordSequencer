@@ -119,10 +119,4 @@
 <section id="drumsequencer" class="container chord-section">
   <h4 class=" mb-3">Chord player</h4>
   <app-drumsequencer (sliderPosition)="onSliderChange($event)" (stop)="onStop()"></app-drumsequencer>
-  <button mat-raised-button color="primary" type="button" class="mt-2" [disabled]="chordsSequence.length < 2">
-    Random Instruments
-  </button>
-  <button mat-raised-button color="primary" type="button" class="mt-2" [disabled]="chordsSequence.length < 2">
-    Random Fields
-  </button>
 </section>

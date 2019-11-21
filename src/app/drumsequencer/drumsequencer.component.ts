@@ -5,6 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {FormArray, FormBuilder, FormControl} from '@angular/forms';
 import {DrumRepository} from './repository/drum.repository';
+import {CommonUtils} from '../utils/common.utils';
 
 @Component({
   selector: 'app-drumsequencer',
@@ -33,9 +34,9 @@ export class DrumsequencerComponent implements OnInit {
   public bpmMax: number = 250;
   public drumSet: DrumSet[] = [];
   public formArray: FormArray;
-  public columns: {value: boolean}[][] = [];
+  public columns: { value: boolean }[][] = [];
 
-  constructor(private fb: FormBuilder, private repository: DrumRepository) {
+  constructor(private fb: FormBuilder, private repository: DrumRepository, private utils: CommonUtils) {
     this.initDrumSet();
     this.initForm();
     this.initColumns();
@@ -126,7 +127,7 @@ export class DrumsequencerComponent implements OnInit {
   }
 
   private playColumn(): void {
-    this.columns.forEach((columns: ({value: boolean})[], index: number) => {
+    this.columns.forEach((columns: ({ value: boolean })[], index: number) => {
       if (columns[this.columnPlaying].value) {
         this.playDrum(this.getDrum(index));
       }
@@ -176,5 +177,24 @@ export class DrumsequencerComponent implements OnInit {
       this.onPause();
       this.onPlay();
     }
+  }
+
+  public randomInstruments(): void {
+    let index1: number;
+    let index2: number;
+
+    for (const control of this.formArray.controls) {
+      index1 = this.utils.generateRandomInteger(0, this.drumSet.length - 1);
+      index2 = this.utils.generateRandomInteger(0, this.drumSet[index1].drums.length - 1);
+
+      control.setValue(this.drumSet[index1].drums[index2]);
+    }
+  }
+
+  public randomFields(): void {
+    this.columns.forEach((rows: { value: boolean }[]) => rows.forEach((col: { value: boolean }) => {
+      col.value = false; // reset to false
+      col.value = !!Math.round(Math.random()); // generate true or false randomly
+    }));
   }
 }
