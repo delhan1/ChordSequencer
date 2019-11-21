@@ -1,12 +1,12 @@
 <section id="control" fxLayout="row wrap" fxLayoutAlign="space-between">
   <div class="control-buttons" fxLayout="row" fxLayoutGap="5%" fxLayoutAlign="space-between">
-    <button mat-raised-button color="primary" (click)="playingBool ? onPause() : onPlay()" fxFlex.gt-md="47"
-            ngClass.gt-md="p-0">
+    <button mat-raised-button color="primary" type="button" (click)="playingBool ? onPause() : onPlay()"
+            fxFlex.gt-md="47" ngClass.gt-md="p-0">
       <mat-icon aria-hidden="false" [attr.aria-label]="(playingBool ? 'Pause' : 'Play') + ' drumsequencer'">
         {{playingBool ? 'pause' : 'play_arrow'}}
       </mat-icon>
     </button>
-    <button mat-raised-button color="primary" (click)="onStop()" fxFlex.gt-md="47" ngClass.gt-md="p-0">
+    <button mat-raised-button color="primary" type="button" (click)="onStop()" fxFlex.gt-md="47" ngClass.gt-md="p-0">
       <mat-icon aria-hidden="false" aria-label="Stop drumsequencer">
         stop
       </mat-icon>
@@ -24,7 +24,7 @@
   </div>
   <ng-container *ngFor="let drumControl of formArray.controls; let idx = index">
     <mat-grid-tile [colspan]="_NUMBER_OF_NAME_COLUMNS" class="bg-white">
-      <mat-form-field class="drumsequencer-form-field" floatLabel="never">
+      <mat-form-field class="drumsequencer-form-field unset" floatLabel="never">
         <mat-select [formControl]="drumControl">
           <mat-select-trigger>
             {{drumControl.value.name}}
@@ -32,7 +32,7 @@
           <mat-optgroup *ngFor="let set of drumSet" [label]="set.name">
             <mat-option *ngFor="let drum of set.drums" [value]="drum">
               {{drum.name}}
-              <button mat-icon-button matSuffix (click)="$event.stopPropagation(); playDrum(drum)">
+              <button mat-icon-button matSuffix type="button" (click)="$event.stopPropagation(); playDrum(drum)">
                 <mat-icon [attr.aria-label]="'Play ' + drum.name" class="mr-0">
                   play_arrow
                 </mat-icon>
@@ -60,3 +60,11 @@
     {{idx + 1}}
   </mat-grid-tile>
 </mat-grid-list>
+
+<button mat-raised-button color="primary" type="button" class="mt-2 mr-2" (click)="randomInstruments()">
+  Random Instruments
+</button>
+
+<button mat-raised-button color="primary" type="button" class="mt-2" (click)="randomFields()">
+  Random Fields
+</button>

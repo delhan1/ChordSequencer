@@ -14,6 +14,7 @@ import {
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
+  MatInputModule,
   MatRippleModule,
   MatSelectModule,
   MatSliderModule
@@ -21,6 +22,7 @@ import {
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DrumsequencerComponent} from './drumsequencer/drumsequencer.component';
 import {DrumRepository} from './drumsequencer/repository/drum.repository';
+import {CommonUtils} from './utils/common.utils';
 
 @NgModule({
   declarations: [
@@ -44,8 +46,9 @@ import {DrumRepository} from './drumsequencer/repository/drum.repository';
     FormsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatInputModule,
   ],
-  providers: [ChordRepository, DrumRepository],
+  providers: [ChordRepository, DrumRepository, CommonUtils],
   bootstrap: [AppComponent]
 })
 export class AppModule {

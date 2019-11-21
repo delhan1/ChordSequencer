@@ -1,11 +1,11 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {Chord} from './chord.model';
-import {FormControl} from '@angular/forms';
+import {AbstractControl, FormControl, Validators} from '@angular/forms';
 import {ChordRepository} from './chord.repository';
 import {CdkDrag, CdkDragDrop, CdkDragMove, CdkDropList, CdkDropListGroup, moveItemInArray} from '@angular/cdk/drag-drop';
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {ViewportRuler} from '@angular/cdk/overlay';
-import {Howl} from 'howler';
+import {CommonUtils} from './utils/common.utils';
 
 declare var chordPlayer: any;
 
@@ -18,12 +18,10 @@ export class AppComponent implements AfterViewInit {
   @ViewChild(CdkDropListGroup, {static: false}) listGroup: CdkDropListGroup<CdkDropList>;
   @ViewChild(CdkDropList, {static: false}) placeholder: CdkDropList;
 
+  private _MIN_SELECTED: number = 1;
+  private _MAX_SELECTED: number = 16;
+
   private timeout;
-  private playing: Subject<boolean> = new Subject<boolean>();
-  private stopped: Subject<boolean> = new Subject<boolean>();
-  private playingBool: boolean = false;
-  private pausedBool: boolean = true;
-  private audio: Howl;
   private playedChord: Chord;
   private playedChordIndex: number = 0;
 
@@ -31,26 +29,35 @@ export class AppComponent implements AfterViewInit {
   public chordsSequence: Chord[] = [];
   public chordNameControl: FormControl;
   public barsControl: FormControl;
+  public selectChordsControl: FormControl;
   public chordSliderPosition: number = 0;
-  public bpm: number = 60; // Beats Per Minute
+  public chordsSelected: number = 0;
 
   public target: CdkDropList;
   public targetIndex: number;
   public source: CdkDropList;
   public sourceIndex: number;
-  public dragIndex: number;
   public activeContainer;
 
-  constructor(private chordRepository: ChordRepository, private viewportRuler: ViewportRuler) {
+  constructor(private chordRepository: ChordRepository, private viewportRuler: ViewportRuler, private utils: CommonUtils) {
+    this.chords = [...this.chordRepository.getChords()]; // backup
     this.chordNameControl = new FormControl(['']);
     this.barsControl = new FormControl(4);
-    this.chords = [...this.chordRepository.getChords()]; // backup
+    this.selectChordsControl = new FormControl(null, [Validators.min(this._MIN_SELECTED),
+      (control: AbstractControl) => {
+        return Validators.max(this.chords.length - 1)(control);
+      }]);
     this.target = null;
     this.source = null;
   }
 
+
+  get MIN_SELECTED(): number {
+    return this._MIN_SELECTED;
+  }
+
   ngAfterViewInit() {
-    let phElement = this.placeholder.element.nativeElement;
+    const phElement = this.placeholder.element.nativeElement;
 
     phElement.style.display = 'none';
     phElement.parentElement.removeChild(phElement);
@@ -72,7 +79,6 @@ export class AppComponent implements AfterViewInit {
         this.playedChord.playing = true;
       }
     }
-
   }
 
   public onStop(): void {
@@ -90,11 +96,38 @@ export class AppComponent implements AfterViewInit {
 
   public check(chord: Chord): void {
     chord.checked = !chord.checked;
+    this.chordsSelected += chord.checked ? 1 : -1;
+  }
+
+  public toggleAll(checked: boolean): void {
+    this.chords.forEach((chord: Chord) => chord.checked = checked);
+    this.chordsSelected = checked ? this.chords.length : 0;
   }
 
   public onStopTyping() {
     clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => this.findChord(), 500);
+    this.timeout = setTimeout(() => {
+      this.findChord();
+      this.selectChordsControl.updateValueAndValidity();
+    }, 500);
+  }
+
+  public randomlySelect(): void {
+    let randomIdx = 0;
+    let chordChecked = false;
+    const select = this.selectChordsControl.value > this.chords.length / 2;
+
+    this.toggleAll(select);
+
+    while (this.chordsSelected !== this.selectChordsControl.value) {
+      randomIdx = this.utils.generateRandomInteger(0, this.chords.length - 1);
+
+      chordChecked = select ? this.chords[randomIdx].checked : !this.chords[randomIdx].checked;
+      if (chordChecked) {
+        this.chords[randomIdx].checked = !select;
+        select ? this.chordsSelected-- : this.chordsSelected++;
+      }
+    }
   }
 
   public addChordToSequence(event: Event, chord: Chord): void {
@@ -113,6 +146,15 @@ export class AppComponent implements AfterViewInit {
       this.playedChord.playing = true;
     } else if (this.playedChordIndex > chordIndex) {
       this.playedChordIndex--;
+    }
+  }
+
+  public shuffleSequence(): void {
+    this.chordsSequence.sort(() => Math.random() - .5);
+    if (this.playedChord) {
+      this.playedChord.playing = false;
+      this.playedChord = this.chordsSequence[this.playedChordIndex];
+      this.playedChord.playing = true;
     }
   }
 
@@ -213,7 +255,7 @@ export class AppComponent implements AfterViewInit {
 
     this.placeholder.enter(drag, drag.element.nativeElement.offsetLeft, drag.element.nativeElement.offsetTop);
     return false;
-  };
+  }
 
   /** Determines the point of the page that was touched by the user. */
   getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
