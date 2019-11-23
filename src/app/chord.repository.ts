@@ -30,6 +30,10 @@ export class ChordRepository {
     this.chords.splice(this.chords.findIndex((chord: Chord) => chord.id === id), 1);
   }
 
+  public removeChords(ids: number[]): void {
+    ids.forEach((id: number) => this.removeChord(id));
+  }
+
   private generateID(): number {
     let candidate = 100;
     while (this.getChord(candidate) != null) {

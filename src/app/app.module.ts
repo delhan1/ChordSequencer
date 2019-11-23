@@ -23,11 +23,13 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {DrumsequencerComponent} from './drumsequencer/drumsequencer.component';
 import {DrumRepository} from './drumsequencer/repository/drum.repository';
 import {CommonUtils} from './utils/common.utils';
+import {DisableControlDirective} from './directive/disable-control.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DrumsequencerComponent
+    DrumsequencerComponent,
+    DisableControlDirective
   ],
   imports: [
     BrowserModule,

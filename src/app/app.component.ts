@@ -108,6 +108,7 @@ export class AppComponent implements AfterViewInit {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       this.findChord();
+      this.chordsSelected = this.chords.filter((chord: Chord) => chord.checked).length;
       this.selectChordsControl.updateValueAndValidity();
     }, 500);
   }
@@ -130,9 +131,17 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  public addChordToSequence(event: Event, chord: Chord): void {
+  public addChordToSequence(chord: Chord): void {
     event.stopPropagation();
     this.chordsSequence.push({ name: chord.name, playing: chord.playing });
+  }
+
+  public addChordsToSequence(): void {
+    this.chords.forEach((chord: Chord) => {
+      if (chord.checked) {
+        this.addChordToSequence(chord);
+      }
+    });
   }
 
   public removeChordFromSequence(event: Event, chordIndex: number): void {
@@ -164,8 +173,21 @@ export class AppComponent implements AfterViewInit {
     this.initChords();
   }
 
-  public removeChord(id: number): void {
+  public removeChord(id: number, checked: boolean): void {
     this.chordRepository.removeChord(id);
+    if (checked) {
+      this.chordsSelected--;
+    }
+    this.initChords();
+  }
+
+  public removeChords(): void {
+    this.chordRepository.removeChords(this.chords
+      .filter((chord: Chord) => chord.checked)
+      .map((chord: Chord) => {
+        this.chordsSelected--;
+        return chord.id;
+      }));
     this.initChords();
   }
 
