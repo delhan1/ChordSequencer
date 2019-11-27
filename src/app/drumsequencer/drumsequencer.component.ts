@@ -1,11 +1,11 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Drum, DrumSet} from './model/drum.model';
-import {MatSliderChange} from '@angular/material';
-import {takeUntil} from 'rxjs/operators';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {FormArray, FormBuilder, FormControl} from '@angular/forms';
-import {DrumRepository} from './repository/drum.repository';
-import {CommonUtils} from '../utils/common.utils';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Drum, DrumSet } from './model/drum.model';
+import { MatSliderChange } from '@angular/material';
+import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, interval, Subject } from 'rxjs';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { DrumRepository } from './repository/drum.repository';
+import { CommonUtils } from '../utils/common.utils';
 
 @Component({
   selector: 'app-drumsequencer',
@@ -36,7 +36,7 @@ export class DrumsequencerComponent implements OnInit {
   public formArray: FormArray;
   public columns: { value: boolean }[][] = [];
 
-  constructor(private fb: FormBuilder, private repository: DrumRepository, private utils: CommonUtils) {
+  constructor(private fb: FormBuilder, private repository: DrumRepository) {
     this.initDrumSet();
     this.initForm();
     this.initColumns();
@@ -93,23 +93,13 @@ export class DrumsequencerComponent implements OnInit {
     this.columns.push(new Array(this._NUMBER_OF_COLUMNS).fill(null).map(() => ({value: false})));
   }
 
-  private playSequence() {
-    this.setIntervalObservable(() =>
-      this.computeSliderPosition(), 60000 / this.bpm / 40)
+  private playSequence(): void {
+    interval(60000 / this.bpm / 40)
       .pipe(takeUntil(this.playing))
-      .subscribe(() => console.log('interval'));
+      .subscribe(() => this.computeSliderPosition());
   }
 
-  private setIntervalObservable(callback, time) {
-    return new Observable(() => {
-      const timeId = setInterval(() => callback(), time);
-      return () => {
-        clearInterval(timeId);
-      };
-    });
-  }
-
-  private computeSliderPosition() {
+  private computeSliderPosition(): void {
     if (this.sliderMoves % this.MOVES_PER_COLUMN === 0) {
       this.playColumn();
       this.columnPlaying++;
@@ -184,8 +174,8 @@ export class DrumsequencerComponent implements OnInit {
     let index2: number;
 
     for (const control of this.formArray.controls) {
-      index1 = this.utils.generateRandomInteger(0, this.drumSet.length - 1);
-      index2 = this.utils.generateRandomInteger(0, this.drumSet[index1].drums.length - 1);
+      index1 = CommonUtils.generateRandomInteger(0, this.drumSet.length - 1);
+      index2 = CommonUtils.generateRandomInteger(0, this.drumSet[index1].drums.length - 1);
 
       control.setValue(this.drumSet[index1].drums[index2]);
     }

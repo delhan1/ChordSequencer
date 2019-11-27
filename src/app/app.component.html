@@ -87,7 +87,7 @@
 </section>
 
 
-<div class="container chord-section" cdkDropListGroup>
+<div class="container chord-section">
   <div fxLayoutAlign="space-between">
     <h4>Chord sequence</h4>
     <mat-form-field class="unset">
@@ -98,29 +98,11 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div class="mt-2" fxLayout="row wrap">
+
+  <app-multirow-drop-list [items]="chordsSequence" [itemOtherTemplate]="otherTemplate" [itemDraggableTemplate]="draggableTemplate">
     <p *ngIf="!chordsSequence.length" class="text-dark col">No chords found, you can add new one.</p>
+  </app-multirow-drop-list>
 
-    <div cdkDropList class="m-1" [cdkDropListEnterPredicate]="dropListEnterPredicate"
-         (cdkDropListDropped)="dropListDropped()">
-    </div>
-
-    <div cdkDropList *ngFor="let chord of chordsSequence; let idx = index;" class="m-1 position-relative"
-         fxFlex="0 0 177px"
-         fxLayoutAlign="center center" [cdkDropListEnterPredicate]="dropListEnterPredicate"
-         (cdkDropListDropped)="dropListDropped()">
-      <span *ngIf="chord.playing" class="chord-slider z-index-5 --primary"
-            [style.left]="chordSliderPosition + '%'"></span>
-      <mat-card cdkDrag class="flex flex-fill cursor-move pt-0 pb-0" (cdkDragMoved)="dragMoved($event);"
-                fxLayoutAlign="space-between center">
-        {{chord.name}}
-        <button mat-icon-button color="accent" class="mr-0" aria-label="Remove chord" type="button"
-                (click)="removeChordFromSequence($event, idx)">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">remove</mat-icon>
-        </button>
-      </mat-card>
-    </div>
-  </div>
   <button mat-raised-button color="primary" type="button" class="mt-2" [disabled]="chordsSequence.length < 2"
           (click)="shuffleSequence()">
     Shuffle Sequence
@@ -131,3 +113,18 @@
   <h4 class=" mb-3">Chord player</h4>
   <app-drumsequencer (sliderPosition)="onSliderChange($event)" (stop)="onStop()"></app-drumsequencer>
 </section>
+
+<!-- TEMPLATES -->
+
+<ng-template #otherTemplate let-item="item">
+  <span *ngIf="item.playing" class="chord-slider z-index-5 --primary"
+        [style.left]="chordSliderPosition + '%'"></span>
+</ng-template>
+
+<ng-template #draggableTemplate let-item="item" let-idx>
+  {{item.name}}
+  <button mat-icon-button color="accent" class="mr-0" aria-label="Remove chord" type="button"
+          (click)="removeChordFromSequence($event, idx)">
+    <mat-icon aria-hidden="false" aria-label="Example home icon">remove</mat-icon>
+  </button>
+</ng-template>

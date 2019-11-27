@@ -1,0 +1,18 @@
+<div class="mt-2" fxLayout="row wrap" cdkDropListGroup>
+  <ng-content></ng-content>
+
+  <div cdkDropList class="m-1" [cdkDropListEnterPredicate]="dropListEnterPredicate"
+       (cdkDropListDropped)="dropListDropped()">
+  </div>
+
+  <div cdkDropList *ngFor="let item of items; let idx = index;" class="m-1 position-relative"
+       fxFlex="0 0 177px"
+       fxLayoutAlign="center center" [cdkDropListEnterPredicate]="dropListEnterPredicate"
+       (cdkDropListDropped)="dropListDropped()">
+    <ng-template *ngTemplateOutlet="itemOtherTemplate; context: {item: item}"></ng-template>
+    <mat-card class="flex flex-fill cursor-move pt-0 pb-0 example-box" fxLayoutAlign="space-between center" cdkDrag (cdkDragMoved)="dragMoved($event);">
+      <ng-template [ngTemplateOutlet]="itemDraggableTemplate" [ngTemplateOutletContext]="{item: item, idx: idx}"></ng-template>
+    </mat-card>
+  </div>
+</div>
+

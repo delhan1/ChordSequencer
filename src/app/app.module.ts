@@ -1,12 +1,12 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-import {AppComponent} from './app.component';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ChordRepository} from './chord.repository';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AppComponent } from './app.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChordRepository } from './chord.repository';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
@@ -19,17 +19,18 @@ import {
   MatSelectModule,
   MatSliderModule
 } from '@angular/material';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {DrumsequencerComponent} from './drumsequencer/drumsequencer.component';
-import {DrumRepository} from './drumsequencer/repository/drum.repository';
-import {CommonUtils} from './utils/common.utils';
-import {DisableControlDirective} from './directive/disable-control.directive';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { DrumsequencerComponent } from './drumsequencer/drumsequencer.component';
+import { DrumRepository } from './drumsequencer/repository/drum.repository';
+import { DisableControlDirective } from './directive/disable-control.directive';
+import { MultirowDropListComponent } from './multirow-drop-list/multirow-drop-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DrumsequencerComponent,
-    DisableControlDirective
+    DisableControlDirective,
+    MultirowDropListComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +51,7 @@ import {DisableControlDirective} from './directive/disable-control.directive';
     MatSelectModule,
     MatInputModule,
   ],
-  providers: [ChordRepository, DrumRepository, CommonUtils],
+  providers: [ChordRepository, DrumRepository],
   bootstrap: [AppComponent]
 })
 export class AppModule {
